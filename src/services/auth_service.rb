@@ -51,19 +51,13 @@ class AuthService
     
     if !user.is_a?(String) || user.empty? ; error_message += "User must be a not empty String. " end
     if !password.is_a?(String) || password.empty? ; error_message += "Password must be a not empty String. " end
-    if password.is_a?(String) && password.length < 8 ; error_message += "Password must at least eight characters long. " end
+    if password.is_a?(String) && password.length < 8 ; error_message += "Password must at least eight characters long." end
 
     error_message
 
   end
 
   def login(user, password)
-
-    # puts user
-    # puts password
-
-    # puts @@auth_storage[user]
-    # puts Digest::SHA256.hexdigest(password + SALT)
 
     check = @@auth_storage[user] == Digest::SHA256.hexdigest(password + SALT)
 

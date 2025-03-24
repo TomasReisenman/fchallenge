@@ -51,7 +51,7 @@ class ProductService
 
     if !id.is_a?(Integer) ; error_message += "Id must be a number. " end
 
-    if !name.is_a?(String) || name.empty? ; error_message += "Name must be a not empty String. " end
+    if !name.is_a?(String) || name.empty? ; error_message += "Name must be a not empty String." end
 
     error_message
     
