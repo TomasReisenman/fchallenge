@@ -8,7 +8,6 @@ class AuthVerifier
   def initialize(app)
 
     @app = app
-    @cookie_database = {}
     @auth_service = AuthService.instance
     
   end
@@ -23,9 +22,10 @@ class AuthVerifier
       return @app.call(env)
       
     end
-
-    return Rack::Response.new(nil, 401, {}).finish()
-
+    
+    message = { "message" => "Invalid token" }
+    Rack::Response.new(JSON.generate(message), 401, {"content-type" => "application/json"}).finish()
+    
   end
 
 

@@ -24,11 +24,11 @@ class AuthController
 
     body = from_json(req.body)
 
-    if body["user"] == nil || body["password"] == nil ; return Rack::Response.new(nil, 422, {}).finish() end
+    if body["user"] == nil || body["password"] == nil ; return Rack::Response.new(JSON.generate({"message" => "Invalid credentials" }), 422, {"Content-Type" => "application/json"}).finish() end
 
     cookie = @auth_service.login(body["user"], body["password"])
 
-    if cookie == nil ; return Rack::Response.new(nil, 400, {}).finish() end
+    if cookie == nil ; return Rack::Response.new(JSON.generate({"message" => "Invalid credentials" }), 400 ,{"Content-Type" => "application/json","Set-Cookie" => cookie}).finish() end
 
     return Rack::Response.new(JSON.generate({"message" => "Welcome to fchallenge" }) , 200, {"Content-Type" => "application/json","Set-Cookie" => cookie}).finish()
     
