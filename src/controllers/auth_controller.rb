@@ -1,6 +1,6 @@
 require 'digest'
-require_relative 'auth_service'
-require_relative 'local-util'
+require_relative '../services/auth_service'
+require_relative '../services/local_util'
 
 class AuthController
 

@@ -1,5 +1,5 @@
-require_relative 'local-util'
-require_relative 'product_service'
+require_relative '../services/local_util'
+require_relative '../services/product_service'
 
 class ProductController
 
