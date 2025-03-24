@@ -1,64 +1,43 @@
 require_relative 'local-util'
+require_relative 'product_service'
 
 class ProductController
 
-  extend LocalUtil
+  include LocalUtil
 
-  BASE_PATH = "/products"
+  def initialize()
 
-  @@storage = []
+    @product_service = ProductService.instance
+
+  end
   
  
-  def self.get_all(req)
+  def get_all(req)
 
-    unless req.path_info == BASE_PATH && req.get? ; return nil end
+    unless req.path_info == ""  && req.get? ; return nil end
+    Rack::Response.new(JSON.generate(@product_service.get_all), 200, {"content-type" => "application/json"}).finish()
     
-    [200, {"content-type" => "application/json" }, [JSON.generate(@@storage)]]
   end
 
-  def self.get_by_id(req)
+  def create(req)
 
-    # split by /
-    # if arr.length != 2 out
-    # req.get? out
-    # if arr[0] != BASE_PATH out
-    # if arr[1] not number out
-
-
-  end
-
-  def self.create(req)
-
-    unless req.path_info == BASE_PATH && req.post? ; return nil end
+    unless req.path_info == ""  && req.post? ; return nil end
 
     body = from_json(req.body)
 
-    process_product(body)
+    error_message =  @product_service.create_product(body) ;
 
-    puts "Result in  #{Time.new}"        
-    [202, {"content-type" => "application/json" }, ["OK"]]
-    
+    message = { "message" => error_message }
+        
+    unless error_message.empty? ; return  Rack::Response.new(JSON.generate(message), 422, {"content-type" => "application/json"}).finish() end
+
+    message = { "message" => "Product received . Will be created in 5 sec" }
+    Rack::Response.new(JSON.generate(message), 202, {"content-type" => "application/json"}).finish()
+        
   end
 
-  def self.process_product(product)
+  def process(req)
 
-    local = Thread.new { sleep(5)
-      
-      @@storage.push(product)
-      puts "In thread #{Time.new} "
-    }
-
-    local.join(0)
-    
-
-  end
-
-
-  def self.process(req, res)
-
-
-    if res != nil ; return res end
-    
     res = get_all(req)
 
     if res != nil; return res end
@@ -67,20 +46,9 @@ class ProductController
 
     if res != nil; return res end
 
-    res
-
-  end  
-
-end
-
-
-class Product
-
-  def initialize(id, description)
-
-    id = id
-    description = description
+    return Rack::Response.new(nil, 404, {}).finish()
 
   end
 
 end
+

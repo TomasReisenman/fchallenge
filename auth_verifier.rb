@@ -10,7 +10,6 @@ class AuthVerifier
     @app = app
     @cookie_database = {}
     @auth_service = AuthService.instance
-    @cookie_database["first"] = Time.new
     
   end
 
@@ -19,7 +18,7 @@ class AuthVerifier
 
     req = Rack::Request.new(env)
 
-        if req.path_info == "/auth" || @auth_service.is_cookie_valid(req.cookies)
+    if req.path_info == "/auth" || req.path_info == "/auth/signin" || @auth_service.is_cookie_valid(req.cookies)
 
       return @app.call(env)
       
