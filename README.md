@@ -45,7 +45,7 @@ bundle exec puma
 
 ```
 
-## Tests can be run without Docke with
+## Tests can be run without Docker (requires ruby tool chain )  with
 
 ```
 ruby test\test.rb
@@ -62,7 +62,7 @@ curl -X POST http://localhost:9292/auth \
 -d '{"user": "fudo", "password": "fudochallenge"}'
 ```
 
-### 2. Sign Up a New User
+### 2. Sign In a New User
 
 ```
 curl -X POST http://localhost:9292/auth/signin \
