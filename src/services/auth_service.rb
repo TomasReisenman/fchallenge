@@ -67,14 +67,14 @@ class AuthService
 
   end
 
-  def is_cookie_valid(cookies)
+  def is_cookie_valid?(cookies)
 
-    @@cookie_storage[cookies["name"]] != nil and !is_cookie_expired(@@cookie_storage[cookies["name"]]) 
+    @@cookie_storage[cookies["name"]] != nil and !is_cookie_expired?(@@cookie_storage[cookies["name"]]) 
 
   end
 
 
-  def is_cookie_expired(date)
+  def is_cookie_expired?(date)
 
     Time.new.to_i - date > 24 * 60 * 60
         
