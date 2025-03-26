@@ -5,23 +5,48 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost:9292
+tags:
+- name: Products
+  description: Save and get products
+- name: Auth
+  description: Authentication
+- name: Server
+  description: Server Info
 paths:
   /auth:
-    get:
+    post:
       summary: Log in a user
+      tags:
+       - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  example: "fudo"
+                password:
+                  type: string
+                  example: "fudochallenge"
       responses:
         '200':
           description: User logged in successfully
           headers:
             Set-Cookie:
+              schema:
+                type: string
               description: Cookie for authentication
-              type: string
         '400':
           description: Invalid credentials
 
   /auth/signin:
     post:
-      summary: Sign up a new user
+      summary: Sign in a new user
+      tags:
+       - Auth
       requestBody:
         required: true
         content:
@@ -44,6 +69,21 @@ paths:
   /products:
     get:
       summary: Get all products
+      tags:
+       - Products
+      parameters:
+        - in: header
+          name: Cookie
+          schema:
+            type: string
+            format: name=cookie
+          required: true
+        - in: header
+          name: Accept-Encoding
+          schema:
+            type: string
+            format: encoding-name
+          required: false
       responses:
         '200':
           description: A list of products
@@ -65,6 +105,15 @@ paths:
 
     post:
       summary: Save a new product
+      tags:
+       - Products
+      parameters:
+        - in: header
+          name: Cookie
+          schema:
+            type: string
+            format: name=cookie
+          required: true
       requestBody:
         required: true
         content:
@@ -89,6 +138,15 @@ paths:
   /AUTHORS:
     get:
       summary: Get a static file with the name of the author
+      tags:
+       - Server
+      parameters:
+        - in: header
+          name: Cookie
+          schema:
+            type: string
+            format: name=cookie
+          required: true
       responses:
         '200':
           description: Author name retrieved successfully
@@ -99,15 +157,25 @@ paths:
                 example: "Author Name"
           headers:
             Cache-Control:
-              description: Cached for 24 hours
-              type: string
+              schema:
+                type: string
               example: "max-age=86400"
+              description: Cached for 24 hours
         '401':
           description: Unauthorized - Invalid token
 
   /openapi.yml:
     get:
       summary: Get a static file with the OpenAPI specification of this server
+      tags:
+       - Server
+      parameters:
+        - in: header
+          name: Cookie
+          schema:
+            type: string
+            format: name=cookie
+          required: true
       responses:
         '200':
           description: OpenAPI specification retrieved successfully
@@ -117,8 +185,9 @@ paths:
                 type: string
           headers:
             Cache-Control:
-              description: Response is never cached
-              type: string
+              schema:
+                   type: string
               example: "no-cache"
+              description: Response is never cached
         '401':
           description: Unauthorized - Invalid token

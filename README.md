@@ -75,6 +75,7 @@ curl -X POST http://localhost:9292/auth/signin \
 
 ```
 curl -X GET http://localhost:9292/products \
+-H "Content-Type: application/json" \
 -H "Cookie: name=<COOKIE>"
 ```
 
